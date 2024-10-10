@@ -15,7 +15,7 @@ export default function Hero() {
             <a href="#installation">Get Started</a>
           </Button>
           <Button size="lg" variant="outline" asChild>
-            <a href="https://github.com/yourusername/scaf" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            <a href="https://github.com/itsparser/scaf" target="_blank" rel="noopener noreferrer">View on GitHub</a>
           </Button>
         </div>
       </div>
