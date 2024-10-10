@@ -99,20 +99,20 @@ export default function Usage() {
                 </SelectContent>
               </Select>
 
-              <MultiSelect
-                options={libraryOptions}
-                selected={libraries}
-                onChange={setLibraries}
-                placeholder="Select libraries"
-              />
+                          <MultiSelect
+        options={libraryOptions}
+        onValueChange={setLibraries}
+        defaultValue={libraries}
+        placeholder="Select libraries"
+      />
 
-              <MultiSelect
-                options={preCommitOptions}
-                selected={preCommitHooks}
-                onChange={setPreCommitHooks}
-                placeholder="Select pre-commit hooks"
-              />
 
+<MultiSelect
+        options={preCommitOptions}
+        onValueChange={setPreCommitHooks}
+        defaultValue={preCommitHooks}
+        placeholder="lect pre-commit hook"
+      />
               <div className="bg-secondary/30 p-4 rounded-md">
                 <p className="font-mono text-sm break-all">{generateCommand()}</p>
               </div>
