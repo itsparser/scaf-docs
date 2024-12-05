@@ -1,0 +1,97 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "$schema": { "type": "string" },
+        "version": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "author": { "type": "string" },
+        "language": { "type": "string" },
+        "tags": {
+            "type": "array",
+            "items": [
+                { "type": "string" },
+                { "type": "string" },
+                { "type": "string" }
+            ]
+        },
+        "args": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "default": { "type": "string" }
+                    },
+                    "required": ["name", "default"]
+                }
+            ]
+        },
+        "extends": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "template_id": { "type": "string" },
+                        "version": { "type": "string" },
+                        "args": {
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": { "type": "string" },
+                                        "default": { "type": "string" }
+                                    },
+                                    "required": ["name", "default"]
+                                }
+                            ]
+                        }
+                    },
+                    "required": ["template_id", "version", "args"]
+                }
+            ]
+        },
+        "steps": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": { "type": "string" },
+                        "description": { "type": "string" },
+                        "type": { "type": "string" },
+                        "content": { "type": "string" }
+                    },
+                    "required": ["id", "description", "type", "content"]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": { "type": "string" },
+                        "description": { "type": "string" },
+                        "path": { "type": "string" },
+                        "type": { "type": "string" },
+                        "content": { "type": "string" }
+                    },
+                    "required": ["id", "description", "path", "type", "content"]
+                }
+            ]
+        }
+    },
+    "required": [
+        "$schema",
+        "version",
+        "name",
+        "description",
+        "author",
+        "language",
+        "tags",
+        "args",
+        "extends",
+        "steps"
+    ]
+}
