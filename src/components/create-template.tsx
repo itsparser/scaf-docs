@@ -89,10 +89,10 @@ export function CreateTemplate() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
+	async function onSubmit(values: z.infer<typeof formSchema>) {
 		// Here you would typically send the data to an API
-		const token = ""; // Retrieve token from your auth context or however it's stored
+		const token = user?.accessToken;
+		// console.log(user)
 		TemplateApi.createTemplate(
 			{
 				_id: values._id,
@@ -156,8 +156,7 @@ export function CreateTemplate() {
 						className="space-y-4 w-full max-w-md"
 					>
 						<FormField
-							// control={form.control}
-							{...register("_id")}
+							control={control}
 							name="_id"
 							render={({ field }) => (
 								<FormItem>
@@ -184,7 +183,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("version")}
 							name="version"
 							render={({ field }) => (
 								<FormItem>
@@ -202,7 +200,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("name")}
 							name="name"
 							render={({ field }) => (
 								<FormItem>
@@ -217,7 +214,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("description")}
 							name="description"
 							render={({ field }) => (
 								<FormItem>
@@ -232,7 +228,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("author")}
 							name="author"
 							render={({ field }) => (
 								<FormItem>
@@ -247,7 +242,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("language")}
 							name="language"
 							render={({ field }) => (
 								<FormItem>
@@ -273,7 +267,15 @@ export function CreateTemplate() {
 								</FormItem>
 							)}
 						/>
-						<Button type="submit" className="w-full">
+						<Button
+							type="submit"
+							className="w-full"
+							onClick={() => {
+								const formData = rest.getValues();
+								console.log("form data", formData);
+								onSubmit(formData);
+							}}
+						>
 							Submit
 						</Button>
 					</form>
