@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import { Template as ITemplate } from "@/types/template";
+import mongoose, { Schema } from "mongoose";
 
-const templateSchema = new mongoose.Schema(
+const templateSchema = new Schema<ITemplate>(
   {
     _id: {
       type: String,

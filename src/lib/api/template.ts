@@ -72,13 +72,10 @@ export class TemplateApi {
       if (params.limit) queryParams.append("limit", params.limit.toString());
       if (params.search) queryParams.append("search", params.search);
 
-      const response = await fetch(
-        `/api/template?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers,
-        }
-      );
+      const response = await fetch(`/api/template?${queryParams.toString()}`, {
+        method: "GET",
+        headers,
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -92,4 +89,5 @@ export class TemplateApi {
       return { error: "Failed to fetch templates" };
     }
   }
-} 
+}
+
