@@ -1,7 +1,7 @@
+"use client";
 // this will decode the url endcode content like
-
-// import { TemplateApi } from "@/lib/api/template";
-// import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import type { Template } from "@/types/template";
 
 // %40itsparser  to @itsparser
 function decodeURL(url: string) {
@@ -11,20 +11,31 @@ function decodeURL(url: string) {
 export default function Page({
 	params,
 }: {
-	params: { templateId: string; username: string };
+	params: Promise<{ templateId: string; username: string }>;
 }) {
-	let userID = decodeURL(params.username);
+	const [unwrappedParams, setUnwrappedParams] = useState<{
+		templateId: string;
+		username: string;
+	} | null>(null);
+	let userID = decodeURL(unwrappedParams?.username || "");
 	if (userID.startsWith("@")) {
 		userID = userID.substring(1);
 	}
-	// const [template, setTemplate] = useState<Template>();
+	const [template, setTemplate] = useState<Template>();
+
+	useEffect(() => {
+		params.then((resolvedParams) => {
+			setUnwrappedParams(resolvedParams);
+		});
+	}, [params]);
+
 	// useEffect(() => {
-	// 	TemplateApi.getTemplate(params.templateId).then((response) => {
+	// 	TemplateApi.getTemplate(unwrappedParams?.templateId || "").then((response) => {
 	// 		if (response.data) {
 	// 			setTemplate(response.data);
 	// 		}
 	// 	});
-	// }, []);
+	// }, [unwrappedParams]);
 
 	//https://localhost:3000/api/userID/templateId
 
