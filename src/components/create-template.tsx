@@ -80,7 +80,7 @@ export function CreateTemplate() {
 	>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			_id: "itsparsersd",
+			_id: "",
 			version: "1.0.0",
 			name: "",
 			description: "",
@@ -95,7 +95,7 @@ export function CreateTemplate() {
 		// console.log(user)
 		TemplateApi.createTemplate(
 			{
-				_id: values._id,
+				_id: values.name.replace(/[^a-zA-Z0-9]/g, "_"),
 				name: values.name,
 				description: values.description,
 			},
@@ -163,11 +163,11 @@ export function CreateTemplate() {
 									<FormLabel>Template ID</FormLabel>
 									<FormControl>
 										<div className="flex">
-											{/* <Input
-                                                value={`${userID}/`}
-                                                className="rounded-r-none bg-gray-100"
-                                                disabled
-                                            /> */}
+											<Input
+												value={`${rest.getValues("name")?.replace(/[^a-zA-Z0-9]/g, "_")}`}
+												className="rounded-r-none bg-gray-100"
+												disabled
+											/>
 											{/*<Input*/}
 											{/*    {...field}*/}
 											{/*    value={field.value.replace(userID, '')}*/}
