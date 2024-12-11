@@ -45,9 +45,7 @@ const LANGUAGES = [
 ];
 const languages = LANGUAGES;
 const formSchema = z.object({
-	_id: z.string().min(2, {
-		message: "Name must be at least 2 characters.",
-	}),
+	_id: z.string(),
 	name: z.string().min(2, {
 		message: "Name must be at least 2 characters.",
 	}),
@@ -90,21 +88,28 @@ export function CreateTemplate() {
 	});
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		// Here you would typically send the data to an API
-		const token = user?.accessToken;
-		// console.log(user)
-		TemplateApi.createTemplate(
-			{
-				_id: values.name.replace(/[^a-zA-Z0-9]/g, "_"),
-				name: values.name,
-				description: values.description,
-			},
-			token,
-		)
-			.then((response) => response.data)
-			.catch((error: unknown) =>
-				console.error("Error creating template:", error),
-			);
+		console.log(user);
+		if (rest.formState) {
+			// Here you would typically send the data to an API
+			const token = user?.accessToken;
+			// console.log(user)
+			TemplateApi.createTemplate(
+				{
+					_id:
+						// biome-ignore lint/style/useTemplate: <explanation>
+						user?.reloadUserInfo?.screenName +
+						"/" +
+						values.name.replace(/[^a-zA-Z0-9]/g, "_"),
+					name: values.name,
+					description: values.description,
+				},
+				token,
+			)
+				.then((response) => response.data)
+				.catch((error: unknown) =>
+					console.error("Error creating template:", error),
+				);
+		}
 	}
 
 	// const handleAddTag = (tag: string) => {

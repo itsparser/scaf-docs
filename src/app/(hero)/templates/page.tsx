@@ -117,7 +117,7 @@ export default function Page() {
                             <Link
                                 key={template.id}
                                 className="p-4 cursor-pointer flex items-center justify-between hover:bg-muted/50 transition-colors"
-                                href={`/templates/${template?._id}`}>
+                                href={`/${template?._id}`}>
                                 <div className="flex-1 pl-4">
                                     <div className="flex items-center space-x-2">
                                         <h3 className="text-lg font-semibold text-blue-600">

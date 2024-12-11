@@ -92,4 +92,25 @@ export class TemplateApi {
       return { error: "Failed to fetch templates" };
     }
   }
+
+  static async getTemplateById(userid:string, id: string): Promise<TemplateApiResponse<Template>> {
+    try {
+      const headers = await this.getAuthHeaders();
+      const response = await fetch(`/api/${userid}/${id}`, {
+        method: "GET",
+        headers,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return { error: error.error || "Failed to fetch template" };
+      }
+
+      const data = await response.json();
+      return { data };
+    } catch (error) {
+      console.error("Error fetching template:", error);
+      return { error: "Failed to fetch template" };
+    }
+  } 
 } 
