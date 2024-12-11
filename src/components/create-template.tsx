@@ -45,9 +45,7 @@ const LANGUAGES = [
 ];
 const languages = LANGUAGES;
 const formSchema = z.object({
-	_id: z.string().min(2, {
-		message: "Name must be at least 2 characters.",
-	}),
+	_id: z.string(),
 	name: z.string().min(2, {
 		message: "Name must be at least 2 characters.",
 	}),
@@ -80,7 +78,7 @@ export function CreateTemplate() {
 	>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			_id: "itsparsersd",
+			_id: "",
 			version: "1.0.0",
 			name: "",
 			description: "",
@@ -89,22 +87,29 @@ export function CreateTemplate() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values);
-		// Here you would typically send the data to an API
-		const token = ""; // Retrieve token from your auth context or however it's stored
-		TemplateApi.createTemplate(
-			{
-				_id: values._id,
-				name: values.name,
-				description: values.description,
-			},
-			token,
-		)
-			.then((response) => response.data)
-			.catch((error: unknown) =>
-				console.error("Error creating template:", error),
-			);
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		console.log(user);
+		if (rest.formState) {
+			// Here you would typically send the data to an API
+			const token = user?.accessToken;
+			// console.log(user)
+			TemplateApi.createTemplate(
+				{
+					_id:
+						// biome-ignore lint/style/useTemplate: <explanation>
+						user?.reloadUserInfo?.screenName +
+						"/" +
+						values.name.replace(/[^a-zA-Z0-9]/g, "_"),
+					name: values.name,
+					description: values.description,
+				},
+				token,
+			)
+				.then((response) => response.data)
+				.catch((error: unknown) =>
+					console.error("Error creating template:", error),
+				);
+		}
 	}
 
 	// const handleAddTag = (tag: string) => {
@@ -156,19 +161,18 @@ export function CreateTemplate() {
 						className="space-y-4 w-full max-w-md"
 					>
 						<FormField
-							// control={form.control}
-							{...register("_id")}
+							control={control}
 							name="_id"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Template ID</FormLabel>
 									<FormControl>
 										<div className="flex">
-											{/* <Input
-                                                value={`${userID}/`}
-                                                className="rounded-r-none bg-gray-100"
-                                                disabled
-                                            /> */}
+											<Input
+												value={`${rest.getValues("name")?.replace(/[^a-zA-Z0-9]/g, "_")}`}
+												className="rounded-r-none bg-gray-100"
+												disabled
+											/>
 											{/*<Input*/}
 											{/*    {...field}*/}
 											{/*    value={field.value.replace(userID, '')}*/}
@@ -184,7 +188,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("version")}
 							name="version"
 							render={({ field }) => (
 								<FormItem>
@@ -202,7 +205,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("name")}
 							name="name"
 							render={({ field }) => (
 								<FormItem>
@@ -217,7 +219,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("description")}
 							name="description"
 							render={({ field }) => (
 								<FormItem>
@@ -232,7 +233,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("author")}
 							name="author"
 							render={({ field }) => (
 								<FormItem>
@@ -247,7 +247,6 @@ export function CreateTemplate() {
 
 						<FormField
 							control={control}
-							// {...register("language")}
 							name="language"
 							render={({ field }) => (
 								<FormItem>
@@ -273,7 +272,15 @@ export function CreateTemplate() {
 								</FormItem>
 							)}
 						/>
-						<Button type="submit" className="w-full">
+						<Button
+							type="submit"
+							className="w-full"
+							onClick={() => {
+								const formData = rest.getValues();
+								console.log("form data", formData);
+								onSubmit(formData);
+							}}
+						>
 							Submit
 						</Button>
 					</form>

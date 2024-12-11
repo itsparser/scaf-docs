@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ChevronRight, Download, List, Star} from 'lucide-react';
 import {Template, TemplateFilters as Filters} from '@/types/template';
 import {Button} from "@/components/ui/button"
@@ -9,6 +9,7 @@ import Link from "next/link";
 import {useAuth} from "@/hooks/auth-provider";
 import {CopyButton} from "@/components/ui/copy-button";
 import {CreateTemplate} from "@/components/create-template";
+import { TemplateApi } from '@/lib/api/template';
 
 const MOCK_TEMPLATES: Template[] = [
     {
@@ -42,13 +43,24 @@ export default function Page() {
         showPrivate: false,
     });
 
-    const filteredTemplates = MOCK_TEMPLATES.filter((template) => {
+    const [templates, setTemplates] = useState<Template[]>([]);
+
+    useEffect(() => {
+        TemplateApi.getTemplates().then((response) => {
+            if (response.data) {
+                setTemplates(response.data.data);
+            }
+        });
+    }, []);
+
+
+    const filteredTemplates = templates.filter((template) => {
         if (!filters.showPrivate && template.isPrivate) return false;
 
         if (
             search &&
-            !template.name.toLowerCase().includes(search.toLowerCase()) &&
-            !template.description.toLowerCase().includes(search.toLowerCase())
+            !template.name?.toLowerCase().includes(search.toLowerCase()) &&
+            !template.description?.toLowerCase().includes(search.toLowerCase())
         ) {
             return false;
         }
@@ -105,7 +117,7 @@ export default function Page() {
                             <Link
                                 key={template.id}
                                 className="p-4 cursor-pointer flex items-center justify-between hover:bg-muted/50 transition-colors"
-                                href={`/${template.name}`}>
+                                href={`/${template?._id}`}>
                                 <div className="flex-1 pl-4">
                                     <div className="flex items-center space-x-2">
                                         <h3 className="text-lg font-semibold text-blue-600">
