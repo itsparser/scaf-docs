@@ -36,7 +36,7 @@ export class TemplateService {
 
   static async getTemplates(options: GetTemplatesOptions = {}) {
     await connectDB();
-    
+
     const page = Math.max(1, options.page || 1);
     const limit = Math.min(50, Math.max(1, options.limit || 10));
     const skip = (page - 1) * limit;
@@ -45,8 +45,8 @@ export class TemplateService {
     const query: any = {};
     if (options.search) {
       query.$or = [
-        { name: { $regex: options.search, $options: 'i' } },
-        { description: { $regex: options.search, $options: 'i' } }
+        { name: { $regex: options.search, $options: "i" } },
+        { description: { $regex: options.search, $options: "i" } },
       ];
     }
 
@@ -57,7 +57,7 @@ export class TemplateService {
         .skip(skip)
         .limit(limit)
         .lean(),
-      Template.countDocuments(query)
+      Template.countDocuments(query),
     ]);
 
     return {
@@ -66,14 +66,14 @@ export class TemplateService {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 
   static async getTemplateById(id: string) {
     await connectDB();
-    return Template.findById(id).lean();
+    return Template.findById(id);
   }
 
   static async updateTemplate(id: string, data: Partial<CreateTemplateDTO>) {
@@ -85,4 +85,4 @@ export class TemplateService {
     await connectDB();
     return Template.findByIdAndDelete(id);
   }
-} 
+}

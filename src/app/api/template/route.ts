@@ -40,7 +40,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, description, _id } = body;
+    let { name, description, _id } = body;
+
+    if (_id && !_id.startsWith(userId)) {
+      _id = `${userId}/${_id}`;
+    }
 
     if (!name || !_id) {
       return NextResponse.json(

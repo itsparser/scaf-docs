@@ -7,12 +7,13 @@ export async function GET(
   { params }: { params: { username: string; templateId: string } }
 ) {
   try {
-    const { username, templateId } = params;
+    const { username, templateId } = await params;
 
     // Get templates with pagination
     const template = await TemplateService.getTemplateById(
       `${username}/${templateId}`
     );
+    console.log("template", template);
     const info = await InfoService.getInfoById(
       `${username}/${templateId}:latest`
     );
@@ -33,15 +34,13 @@ export async function GET(
   }
 }
 
-// Get info for a specific template
 export async function POST(
   request: Request,
   { params }: { params: { username: string; templateId: string } }
 ) {
   try {
-    const { username, templateId } = params;
+    const { username, templateId } = await params;
 
-    // Get templates with pagination
     const template = await TemplateService.getTemplateById(
       `${username}/${templateId}`
     );
